@@ -3,18 +3,18 @@
 #%% Import
 import numpy as np
 import scipy
+from scipy import interpolate
 import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec
 import cartopy.crs as ccrs
 
 #%%
-def global_scatterplot(lat, lon, x, title='', subtitle='', cmap='PuOr_r', clabel='', vmin=None, vmax=None, coast=True, MLT=False, fig = None):
+def global_scatterplot(lat, lon, x, title='', subtitle='', cmap='PuOr_r', clabel='', vmin=None, vmax=None, coast=True, MLT=False):
     if subtitle == '':
         subtitle = 'Data-points: {}'.format(int(len(x)))
     
-    if fig is None:
-        fig = plt.figure(figsize = (12, 12))
+    fig = plt.figure(figsize = (12, 12))
     gs=GridSpec(7,6)    
     
     # North Pole
@@ -87,7 +87,7 @@ def global_contour(lat, lon, x, res=1, n_levels=30, title='', subtitle='', cmap=
     lon_grid = np.arange(0, 360+res, res)
     lat_grid, lon_grid = np.meshgrid(lat_grid, lon_grid)
         # Interpolate to meshgrid
-    var = scipy.interpolate.griddata((lat, lon), x, (lat_grid, lon_grid))
+    var = interpolate.griddata((lat, lon), x, (lat_grid, lon_grid))
     if log10:
         flag_neg = var < 0
         x = np.log10(abs(var))
@@ -121,7 +121,7 @@ def global_contour(lat, lon, x, res=1, n_levels=30, title='', subtitle='', cmap=
     lon_grid = np.arange(0, 360+res, res)
     lat_grid, lon_grid = np.meshgrid(lat_grid, lon_grid)
         # Interpolate to meshgrid
-    var = scipy.interpolate.griddata((lat, -1*((lon+180)%360)+360), x, (lat_grid, lon_grid))
+    var = interpolate.griddata((lat, -1*((lon+180)%360)+360), x, (lat_grid, lon_grid))
     #lon_grid = -1*((lon_grid+180)%360)+360
     if log10:
         flag_neg = var < 0
@@ -152,7 +152,7 @@ def global_contour(lat, lon, x, res=1, n_levels=30, title='', subtitle='', cmap=
     lon_grid = np.arange(0, 360+res, res)
     lat_grid, lon_grid = np.meshgrid(lat_grid, lon_grid)
         # Interpolate to meshgrid
-    var = scipy.interpolate.griddata((lat, lon), x, (lat_grid, lon_grid))
+    var = interpolate.griddata((lat, lon), x, (lat_grid, lon_grid))
     if log10:
         flag_neg = x < 0
         var = np.log10(abs(var))
